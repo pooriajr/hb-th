@@ -8,7 +8,7 @@ class AlertsController < ApplicationController
   private
   
   def spam_notification?
-    @payload["Description"] =~ /spam/
+    @payload["Type"] == "SpamNotification"
   end
   
   def alert_slack
@@ -20,7 +20,7 @@ class AlertsController < ApplicationController
     request = Net::HTTP::Post.new(uri)
     request.content_type = "application/json"
     request.body = JSON.dump({
-      "text" => "Spam notification from #{@payload["Email"]}",
+      "text" => "Spam notification re: #{@payload["Email"]}",
     })
 
     req_options = {
