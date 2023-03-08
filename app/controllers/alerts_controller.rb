@@ -1,3 +1,7 @@
+require 'net/http'
+require 'uri'
+require 'json'
+
 class AlertsController < ApplicationController
   def create
     @payload = JSON.parse(request.body.read)
@@ -12,11 +16,7 @@ class AlertsController < ApplicationController
   end
   
   def alert_slack
-    require 'net/http'
-    require 'uri'
-    require 'json'
-
-    uri = URI.parse("https://hooks.slack.com/services/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")
+    uri = URI.parse Rails.application.credentials.slack_webhook_url
     request = Net::HTTP::Post.new(uri)
     request.content_type = "application/json"
     request.body = JSON.dump({
